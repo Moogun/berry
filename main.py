@@ -1,42 +1,36 @@
-from PyQt5.QtWidgets import *
-import sys
-import win32com.client
+from pyxing.session import *
+from pyxing.query import *
+import pandas as pd
 
+# Login
+xasession = XASession()
+xasession.login(id="Taketheg", password="bwii1145", cert="Bwiisi07@3", block=True)
 
-ID = "Taketheg"
-PASSWD = "bwii1145"
-CERT = "Bwiisi07@3"
+xaquery = XAQuery()
 
-# 이벤트 처리용 클래스
-class XASessionEvents:
-    def OnLogin(self, code, msg):
-        if code == "0000":
-            print("로그인 성공")
-        else:
-            print("로그인 실패 ", msg)
+# buy strength pnt = "137400"
+# dfs = xaquery.block_request("t1475", shcode=pnt, vptype="0",
+#                             datacnt=500,
+#                             date="", # outblock date for next batch of data
+#                             time="", #outblock date for next batch of data
+#                             )
+# print('buy_strength', dfs)
+# df = dfs[1]
+# df.to_excel("buy_strength.xlsx")
 
+# buy volume spike compared to the same time yesterday
+# dfs = xaquery.block_request("t1475", shcode=pnt, vptype="0",
+#                             datacnt=500,
+#                             date="", # outblock date for next batch of data
+#                             time="", #outblock date for next batch of data
+#                             )
 
-# XASession 클래스
-class XASession:
-    def __init__(self):
-        self.session = win32com.client.DispatchWithEvents("XA_Session.XASession", XASessionEvents)
-        self.session.ConnectServer("hts.ebestsec.co.kr", 20001)
+# min/tick
+# pnt = "137400"
+# dfs = xaquery.block_request("t1310",
+#                             daygb="0", # 0 today, 1 yesterday
+#                             timegb="0", # 0 tick, 1 min
+#                             shcode=pnt,
+#                             )
 
-    def login(self, id, passwd, cert):
-        self.session.Login(id, passwd, cert, 0, False)
-
-
-# 메인 윈도우
-class MyWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-
-        self.session = XASession()
-        self.session.login(ID, PASSWD, CERT)
-
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MyWindow()
-    window.show()
-    app.exec_()
+print(dfs)
