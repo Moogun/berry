@@ -1,18 +1,14 @@
+import pandas as pd
+import file1
 from pyxing.session import *
 from pyxing.query import *
 
 # Login
 xasession = XASession()
-xasession.login(id="Taketheg", password="bwii1145", cert="Bwiisi07@3", block=True)
+xasession.login(id=file1.id, password=file1.pwd, cert=file1.cert, block=True)
+print("서버: ", xasession.get_server_name()," connected - ", xasession.is_connected()," accountList(0) - ", xasession.get_account_list(0))
 
-print("서버이름: ", xasession.get_server_name())
-print("연결상태: ", xasession.is_connected())
-print("계좌    : ", xasession.get_account_list(0))
-
-# block request 메서드로 요청하기 (blocking 방식)
-# dfs = xaquery.block_request("t8430", gubun=0)
-# print(dfs[0])
-
+# Query
 xaquery = XAQuery()
 
 def check_acnt():
@@ -41,14 +37,27 @@ def check_stocks_holding():
     dfs = xaquery.block_request("t0424", accno="20658614901", passwd="1145")
     print('dfs', dfs)
 
+# hold list of candidates
+candidate = []
+liveDataKey = ''
+
 def e_search():
     dfs = xaquery.block_request("t1857",
-                                sRealFlag="0", # 0: 조회, 1: 실시간
+                                sRealFlag="1", # 0: 조회, 1: 실시간
                                 sSearchFlag="S",# F: file, S: Server
                                 query_index="Taketheg0001",)
-    print('dfs', dfs)
+    global candidate
+    global liveDataKey
+    candidate = dfs[0] # dfs is [df], cts_time (a tuple) df is a list
+    # print('candidate[0] type ---------- ', type(candidate[0]), '- len(candidate) - ', len(candidate),  len(candidate[0]))
+    liveDataKey = candidate.loc[0]['AlertNum']
+    print('liveDataKey', liveDataKey)
+    pd.DataFrame(candidate[1]).to_excel("candidate2.xlsx")
 
 e_search()
+print('candiate[0] ', candidate[0])
+# print('candiate[0][shcode] ', candidate[0][0])
+# print('candiate[0][shcode][AlertNum] ', candidate[0][0]['AlertNum'])
 
 #
 # def handle_input(input_char: str) -> None:
