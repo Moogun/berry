@@ -43,9 +43,9 @@ def check_stocks_holding():
 
 def e_search():
     dfs = xaquery.block_request("t1857",
-                                sRealFlag="1", # 0: 조회, 1: 실시간
+                                sRealFlag="0", # 0: 조회, 1: 실시간
                                 sSearchFlag="S",# F: file, S: Server
-                                query_index="Taketheg00",)
+                                query_index="Taketheg0001",)
     print('dfs', dfs)
 
 e_search()
