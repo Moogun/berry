@@ -1,12 +1,19 @@
 import pandas as pd
-import file1
 from pyxing.session import *
 from pyxing.query import *
 
+f = open("account.txt", "rt")
+lines = f.readlines()
+id = lines[0].strip()
+pwd = lines[1].strip()
+cert = lines[2].strip()
+f.close()
+
 # Login
 xasession = XASession()
-xasession.login(id=file1.id, password=file1.pwd, cert=file1.cert, block=True)
-print("서버: ", xasession.get_server_name()," connected - ", xasession.is_connected()," accountList(0) - ", xasession.get_account_list(0))
+xasession.login(id=id, password=pwd, cert=cert, block=True)
+print("서버: ", xasession.get_server_name(), " connected - ", xasession.is_connected(), " accountList(0) - ",
+      xasession.get_account_list(0))
 
 # Query
 xaquery = XAQuery()
@@ -43,7 +50,7 @@ liveDataKey = ''
 
 def e_search():
     dfs = xaquery.block_request("t1857",
-                                sRealFlag="1", # 0: 조회, 1: 실시간
+                                sRealFlag="0", # 0: 조회, 1: 실시간
                                 sSearchFlag="S",# F: file, S: Server
                                 query_index="Taketheg0002",)
                                 # query_index="C:\\Users\\moogun\\tech\\230413_xing\che1.2x vol400 volup1.5x.ACF"
@@ -51,25 +58,23 @@ def e_search():
     global candidate
     global liveDataKey
     # print('e_search dfs - ', dfs)
-    # dfs is a tuple, ( [block 2], cts_time )
+    # dfs is a tuple, ( [block 1 + 2], cts_time )
 
     if len(dfs[0]) == 0:
         print('No Outblock')
         return
     else:
         # oBlock_1 = pd.DataFrame(dfs[0])
+        print('dfs', dfs)
+
         print('dfs[0]', dfs[0])
-
         # print('oBlock_1 - list', type(oBlock_1))
-        # liveDataKey = oBlock_1[0][2]
 
-        # print('oBlock_1 - df', oBlock_1.loc[0]['AlertNum'] )
+        oBlock_2 = pd.DataFrame(dfs)
+        # oBlock_2.to_excel("candidate22.xlsx")
 
-        # pd.DataFrame(oBlock_1).loc[0]['AlertNum']
-        # print('liveDataKey', liveDataKey)
-
-        oBlock_2 = pd.DataFrame(dfs[0])
-        oBlock_2.to_excel("candidate1.xlsx")
+        # oBlock_3 = pd.DataFrame(dfs[0])
+        # oBlock_3.to_excel("candidate33.xlsx")
 
 e_search()
 
@@ -89,19 +94,3 @@ e_search()
 # while True:
 #     input_char = input("Press a key: ")
 #     handle_input(input_char)
-
-if __name__ == "__main__":
-    # 로그인 정보
-    f = open("../account.txt", "rt")
-    lines = f.readlines()
-    id = lines[0].strip()
-    password = lines[1].strip()
-    cert = lines[2].strip()
-    f.close()
-
-    # 로그인
-    from pyxing import session
-
-    # Session
-    xasession = session.XASession()
-    xasession.login(id, password, cert, block=True)
