@@ -52,8 +52,8 @@ def e_search():
     dfs = xaquery.block_request("t1857",
                                 sRealFlag="0", # 0: 조회, 1: 실시간
                                 sSearchFlag="S",# F: file, S: Server
-                                query_index="Taketheg0002",)
-                                # query_index="C:\\Users\\moogun\\tech\\230413_xing\che1.2x vol400 volup1.5x.ACF"
+                                # query_index="Taketheg0002",)
+                                query_index="C:\\Users\\moogun\\tech\\230413_xing\1.4x.ACF")
 
     global candidate
     global liveDataKey
